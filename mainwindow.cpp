@@ -10,12 +10,12 @@ MainWindow::MainWindow(QWidget *parent)
     cardQSS = "background: white;"
               "border-radius: 8px;";
 
-    for (int i = 0; i < 30; i++)
-    {
-        QWidget* w = new QWidget(ui->scrollArea->widget());
-        w->setStyleSheet(cardQSS);
-        w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
-    }
+//    for (int i = 0; i < 30; i++)
+//    {
+//        QWidget* w = new QWidget(ui->scrollArea->widget());
+//        w->setStyleSheet(cardQSS);
+//        w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
+//    }
 
     ui->scrollArea->initFixedChildren();
 }
@@ -53,7 +53,6 @@ void MainWindow::on_checkBox_clicked()
     {
         ui->scrollArea->setAllowDifferentWidth(false);
         ui->scrollArea->resizeWidgetsToEqualWidth();
-        ui->scrollArea->adjustWidgetPos();
     }
     else // 随机宽度
     {
@@ -62,6 +61,6 @@ void MainWindow::on_checkBox_clicked()
             w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
         }
         ui->scrollArea->setAllowDifferentWidth(true);
-        ui->scrollArea->adjustWidgetPos();
     }
+    ui->scrollArea->adjustWidgetPos();
 }

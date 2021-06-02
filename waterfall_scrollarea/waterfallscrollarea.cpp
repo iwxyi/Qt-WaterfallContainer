@@ -63,8 +63,8 @@ void WaterfallScrollArea::adjustWidgetPos()
             colWidth = qMax(colWidth, 1);
         }
     }
-    if (widgets.isEmpty())
-        return ;
+    /* if (widgets.isEmpty())
+        return ; */
 
     if (equalWidthMode)
         adjustWaterfallPos();
@@ -218,7 +218,7 @@ void WaterfallScrollArea::adjustVariantWidthPos()
     cr.setWidth(qMax(1, cr.width() - this->verticalScrollBar()->width()));
 
     bottomLines.clear();
-    bottomLines.append(BottomLine{itemMarginH, cr.width() - itemMarginH * 2, 0});
+    bottomLines.append(BottomLine{itemMarginH, cr.width() - itemMarginH * 2, itemMarginV});
     foreach (auto w, widgets)
     {
         placeVariantWidthWidget(w);
@@ -249,7 +249,7 @@ void WaterfallScrollArea::placeVariantWidthWidget(QWidget *w)
         // 即找到左边比它高的x
         int avaliableLeft = bottomLine.left;
         int avaliableLeftIndex = i;
-        for (int j = 0; j < i; j++)
+        for (int j = i - 1; j >= 0; j--)
         {
             if (bottomLines.at(j).y <= y) // 可以继续使用
             {
@@ -272,7 +272,7 @@ void WaterfallScrollArea::placeVariantWidthWidget(QWidget *w)
                 avaliableRight = bottomLines.at(j).right;
                 avaliableRightIndex = j;
 
-                if (avaliableRight - avaliableLeft >= wi)
+                if (avaliableRight - avaliableLeft >= wi) // 已经足够放入了，不需要右边的更多
                     break;
             }
             else
@@ -344,6 +344,10 @@ void WaterfallScrollArea::placeVariantWidthWidget(QWidget *w)
         else // 只占了一部分，拆分
         {
             bottomLines[placeLeftIndex].left = placeRight + itemSpacingH;
+
+            // 因为 itemSpacing 的存在，使得即使有一丝丝空间，也存不下，干脆就删掉
+            if (bottomLines.at(placeLeftIndex).left >= bottomLines.at(placeLeftIndex).right)
+                bottomLines.removeAt(placeLeftIndex);
             break;
         }
     }
@@ -351,6 +355,12 @@ void WaterfallScrollArea::placeVariantWidthWidget(QWidget *w)
 
     // 移动控件
     w->move(placeLeft, topestY + itemSpacingV);
+
+    // 调试输出
+    /* QString s;
+    foreach (auto bl, bottomLines)
+        s.append(QString("(%1, %2, %3) ").arg(bl.left).arg(bl.right).arg(bl.y));
+    qDebug() << s; */
 }
 
 QList<QWidget *> WaterfallScrollArea::getWidgets()
