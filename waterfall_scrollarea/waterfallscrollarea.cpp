@@ -42,6 +42,11 @@ void WaterfallScrollArea::setAllowDifferentWidth(bool en)
     this->equalWidthMode = !en;
 }
 
+void WaterfallScrollArea::setAnimationEnabled(bool en)
+{
+    this->useAnimation = en;
+}
+
 /// 固定的子项，就是以后resize的时候不需要重复获取子项了
 /// 理论上来说能够提高一些速度
 /// 动态添加控件时不建议使用，若要使用务必在更新后手动调用 updateChildWidgets
@@ -88,13 +93,15 @@ void WaterfallScrollArea::addWidget(QWidget *w)
     {
         if (w->width() > colWidth) // 需要调整所有的宽度
         {
+            colWidth = w->width();
             resizeWidgetsToEqualWidth();
             adjustWidgetPos();
             return ;
         }
         else
         {
-            w->resize(colWidth, w->height());
+            if (useEqualWidth)
+                w->resize(colWidth, w->height());
         }
     }
 
@@ -183,7 +190,7 @@ void WaterfallScrollArea::adjustWaterfallPos()
         if (w->pos() == targetPos)
             continue;
 
-        if ((w->pos() - targetPos).manhattanLength() <= 4)
+        if (!useAnimation || (w->pos() - targetPos).manhattanLength() <= 4)
         {
             w->move(targetPos);
             continue;
@@ -354,7 +361,24 @@ void WaterfallScrollArea::placeVariantWidthWidget(QWidget *w)
     bottomLines.insert(placeLeftIndex, newBottom);
 
     // 移动控件
-    w->move(placeLeft, topestY + itemSpacingV);
+    QPoint targetPos(placeLeft, topestY + itemSpacingV);
+    if (!useAnimation || (w->pos() - targetPos).manhattanLength() <= 4)
+    {
+        w->move(targetPos);
+    }
+    else
+    {
+        QPropertyAnimation* ani = new QPropertyAnimation(w, "pos");
+        ani->setDuration(300);
+        ani->setStartValue(w->pos());
+        ani->setEndValue(targetPos);
+        ani->setEasingCurve(QEasingCurve::OutCubic);
+        connect(ani, &QPropertyAnimation::stateChanged, this, [=](QPropertyAnimation::State state){
+            if (state == QPropertyAnimation::State::Stopped) // 因为大概率是连续触发的移动，所以不能用 finished
+                ani->deleteLater();
+        });
+        ani->start();
+    }
 
     // 调试输出
     /* QString s;
@@ -390,6 +414,7 @@ void WaterfallScrollArea::resizeWidgetsToEqualWidth()
     {
         w->resize(colWidth, w->height());
     }
+    useEqualWidth = true;
 }
 
 /// 返回适当的列宽

@@ -1,3 +1,4 @@
+#include <QLabel>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -8,14 +9,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     cardQSS = "background: white;"
-              "border-radius: 8px;";
+              "border-radius: 10px;"
+              "font-size: 20px;"
+              "font-weight: 700;";
 
-//    for (int i = 0; i < 30; i++)
-//    {
-//        QWidget* w = new QWidget(ui->scrollArea->widget());
-//        w->setStyleSheet(cardQSS);
-//        w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
-//    }
+    for (int i = 0; i < 30; i++)
+    {
+        QLabel* w = new QLabel(QString::number(widgetId++), ui->scrollArea->widget());
+        w->setStyleSheet(cardQSS);
+        w->setAlignment(Qt::AlignCenter);
+        w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
+    }
 
     ui->scrollArea->initFixedChildren();
 }
@@ -36,13 +40,16 @@ void MainWindow::on_spinBox_valueChanged(int arg1)
 void MainWindow::on_pushButton_clicked()
 {
     // 创建控件
-    QWidget* w = new QWidget(ui->scrollArea->widget());
+    QLabel* w = new QLabel(QString::number(widgetId++), ui->scrollArea->widget());
     w->setStyleSheet(cardQSS);
+    w->setAlignment(Qt::AlignCenter);
     w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
     w->show();
 
     // 添加到区域
+    ui->scrollArea->setAnimationEnabled(false);
     ui->scrollArea->addWidget(w);
+    ui->scrollArea->setAnimationEnabled(true);
     ui->scrollArea->scrollToBottom();
 }
 
@@ -62,5 +69,12 @@ void MainWindow::on_checkBox_clicked()
         }
         ui->scrollArea->setAllowDifferentWidth(true);
     }
+    ui->scrollArea->adjustWidgetPos();
+    ui->spinBox->setEnabled(ui->checkBox->isChecked());
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->scrollArea->resizeWidgetsToEqualWidth();
     ui->scrollArea->adjustWidgetPos();
 }

@@ -22,9 +22,12 @@ private slots:
 
     void on_checkBox_clicked();
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     QString cardQSS;
+    int widgetId = 0;
 };
 #endif // MAINWINDOW_H

@@ -19,7 +19,8 @@ public:
     void setItemMargin(int h, int v);
     void setFixedColCount(int c);
     void setAlignment(Qt::Alignment align);
-    void setAllowDifferentWidth(bool en = true);
+    void setAllowDifferentWidth(bool en);
+    void setAnimationEnabled(bool en);
 
     void initFixedChildren();
     void updateChildWidgets();
@@ -62,12 +63,14 @@ protected:
 private:
     // ==== 瀑布流 ====
     // 界面数值
-    int itemMarginH = 0; // 左右边距
-    int itemMarginV = 0; // 上下边距
+    int itemMarginH = 9; // 左右边距
+    int itemMarginV = 9; // 上下边距
     int itemSpacingH = 9;
     int itemSpacingV = 9;
     Qt::Alignment alignment = Qt::AlignCenter;
     bool useSizeHint = false; // 添加的控件是否自动使用sizeHint
+    bool useEqualWidth = false; // 新添加的控件是否自动使用 colWidth
+    bool useAnimation = true; // 是否显示移动控件的动画
 
     // 控件及初始化
     QList<QWidget*> widgets;
