@@ -33,6 +33,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_spinBox_valueChanged(int arg1)
 {
     ui->scrollArea->setFixedColCount(arg1);
+    ui->scrollArea->resizeWidgetsToEqualWidth();
     ui->scrollArea->adjustWidgetPos();
 }
 
@@ -56,6 +57,11 @@ void MainWindow::on_pushButton_clicked()
 /// 全部设为相同宽度
 void MainWindow::on_checkBox_clicked()
 {
+    foreach (auto w, ui->scrollArea->getWidgets())
+    {
+        w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
+    }
+
     if (ui->checkBox->isChecked()) // 相同宽度
     {
         ui->scrollArea->setAllowDifferentWidth(false);
@@ -63,10 +69,6 @@ void MainWindow::on_checkBox_clicked()
     }
     else // 随机宽度
     {
-        foreach (auto w, ui->scrollArea->getWidgets())
-        {
-            w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
-        }
         ui->scrollArea->setAllowDifferentWidth(true);
     }
     ui->scrollArea->adjustWidgetPos();

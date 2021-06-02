@@ -61,15 +61,13 @@ void WaterfallScrollArea::adjustWidgetPos()
     if (!fixedChildren)
     {
         updateChildWidgets();
-
-        if (fixedColCount > 0) // 仅根据列数变化
-        {
-            colWidth = (this->contentsRect().width() - itemMarginH * 2 + itemSpacingH) / fixedColCount - itemSpacingH;
-            colWidth = qMax(colWidth, 1);
-        }
     }
-    /* if (widgets.isEmpty())
-        return ; */
+
+    if (fixedColCount > 0) // 仅根据列数变化
+    {
+        colWidth = (this->contentsRect().width() - itemMarginH * 2 + itemSpacingH) / fixedColCount - itemSpacingH;
+        colWidth = qMax(colWidth, 1);
+    }
 
     if (equalWidthMode)
         adjustWaterfallPos();
@@ -410,6 +408,14 @@ void WaterfallScrollArea::resizeWidgetsToEqualWidth()
 {
     if (widgets.isEmpty())
         updateChildWidgets();
+
+    if (fixedColCount > 0) // 仅根据列数变化
+    {
+        colWidth = (this->contentsRect().width() - itemMarginH * 2 + itemSpacingH) / fixedColCount - itemSpacingH;
+        colWidth = qMax(colWidth, 1);
+        qDebug() << "设置colWidth:" << colWidth;
+    }
+
     foreach (auto w, widgets)
     {
         w->resize(colWidth, w->height());
