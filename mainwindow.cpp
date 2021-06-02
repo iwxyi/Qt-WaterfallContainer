@@ -34,7 +34,7 @@ void MainWindow::on_spinBox_valueChanged(int arg1)
 {
     ui->scrollArea->setFixedColCount(arg1);
     ui->scrollArea->resizeWidgetsToEqualWidth();
-    ui->scrollArea->adjustWidgetPos();
+    ui->scrollArea->adjustWidgetsPos();
 }
 
 /// 添加控件
@@ -71,12 +71,12 @@ void MainWindow::on_checkBox_clicked()
     {
         ui->scrollArea->setAllowDifferentWidth(true);
     }
-    ui->scrollArea->adjustWidgetPos();
+    ui->scrollArea->adjustWidgetsPos();
     ui->spinBox->setEnabled(ui->checkBox->isChecked());
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
     ui->scrollArea->resizeWidgetsToEqualWidth();
-    ui->scrollArea->adjustWidgetPos();
+    ui->scrollArea->adjustWidgetsPos();
 }

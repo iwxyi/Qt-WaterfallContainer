@@ -56,7 +56,7 @@ void WaterfallScrollArea::initFixedChildren()
     updateChildWidgets();
 }
 
-void WaterfallScrollArea::adjustWidgetPos()
+void WaterfallScrollArea::adjustWidgetsPos()
 {
     if (!fixedChildren)
     {
@@ -93,7 +93,7 @@ void WaterfallScrollArea::addWidget(QWidget *w)
         {
             colWidth = w->width();
             resizeWidgetsToEqualWidth();
-            adjustWidgetPos();
+            adjustWidgetsPos();
             return ;
         }
         else
@@ -433,7 +433,7 @@ int WaterfallScrollArea::getWidgetWidth()
 
 void WaterfallScrollArea::resizeEvent(QResizeEvent *event)
 {
-    adjustWidgetPos();
+    adjustWidgetsPos();
 
     return QScrollArea::resizeEvent(event);
 }

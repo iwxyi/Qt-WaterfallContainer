@@ -26,7 +26,6 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
-    waterfall_scrollarea/smoothlistwidget.h \
     waterfall_scrollarea/smoothscrollbean.h \
     waterfall_scrollarea/waterfallscrollarea.h
 

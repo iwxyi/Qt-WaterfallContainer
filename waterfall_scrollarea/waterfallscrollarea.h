@@ -24,7 +24,7 @@ public:
 
     void initFixedChildren();
     void updateChildWidgets();
-    void adjustWidgetPos();
+    void adjustWidgetsPos();
     void addWidget(QWidget* w);
 
     QList<QWidget*> getWidgets();
