@@ -25,13 +25,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/// 固定列数
 void MainWindow::on_spinBox_valueChanged(int arg1)
 {
-    QWidget* w = new QWidget(ui->scrollArea->widget());
-    w->setStyleSheet(cardQSS);
-    w->resize(qrand() % 50 + 100, qrand() % 100 + 20);
-    if (ui->checkBox->isChecked())
-        w->resize(ui->scrollArea->getWidgetWidth(), w->height());
+    ui->scrollArea->setFixedColCount(arg1);
+    ui->scrollArea->adjustWidgetPos();
 }
 
 /// 添加控件

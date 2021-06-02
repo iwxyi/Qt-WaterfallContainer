@@ -10,10 +10,14 @@ class WaterfallScrollArea : public QScrollArea
 public:
     WaterfallScrollArea(QWidget* parent = nullptr);
 
+    struct BottomLine {
+        int left, right, y;
+    };
+
     // 瀑布流
     void setItemSpacing(int h, int v);
     void setItemMargin(int h, int v);
-    void setColCount(int c);
+    void setFixedColCount(int c);
     void setAlignment(Qt::Alignment align);
     void setAllowDifferentWidth(bool en = true);
 
@@ -23,7 +27,7 @@ public:
     void addWidget(QWidget* w);
 
     QList<QWidget*> getWidgets();
-    void resizeWidgetsSizeBySizeHint();
+    void resizeWidgetsToSizeHint();
     void resizeWidgetsToEqualWidth();
     int getWidgetWidth();
 
@@ -40,6 +44,7 @@ public:
 private:
     void adjustWaterfallPos();
     void adjustVariantWidthPos();
+    void placeVariantWidthWidget(QWidget* w);
 
     void addSmoothScrollThread(int distance, int duration);
 
@@ -74,8 +79,10 @@ private:
     int colCount = 0; // 目前使用的列数
     int colWidth = 0; // 所有子项的最宽宽度，排列按照这顺序来
     QList<int> colBottoms;
-
     int allLeft = 0;
+
+    // 不同宽度模式
+    QList<BottomLine> bottomLines;
 
     // ==== 平滑滚动 ====
     bool enabledSmoothScroll = true;
